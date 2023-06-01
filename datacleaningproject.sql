@@ -19,6 +19,9 @@ UPDATE housing_data
 SET Property_Address = (select CASE WHEN Property_Address = "" THEN "N/A" END)
 WHERE Property_Address = "";
 
+
+
+
 -- Change Y and N to Yes and No in "Sold as Vacant" field
 UPDATE housing_data
 SET Sold_As_Vacant = (SELECT  
