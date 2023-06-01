@@ -8,9 +8,16 @@ SET Sale_date = (SELECT  STR_TO_DATE(Sale_Date, '%m/%d/%y') AS Updated_Sale_date
 
 -- Populate Address data
 SELECT * FROM housing_data WHERE Address = "";
-
 UPDATE housing_data
 SET Address = (SELECT Property_Address);
+
+
+
+-- Fill all empty address columns with "N/A"
+SELECT * FROM housing_data WHERE Property_Address = "";
+UPDATE housing_data
+SET Property_Address = (select CASE WHEN Property_Address = "" THEN "N/A" END)
+WHERE Property_Address = "";
 
 -- Change Y and N to Yes and No in "Sold as Vacant" field
 UPDATE housing_data
