@@ -7,14 +7,18 @@ UPDATE housing_data
 SET Sale_date = (SELECT  STR_TO_DATE(Sale_Date, '%m/%d/%y') AS Updated_Sale_date);
 
 -- Populate Address data
-SELECT * FROM housing_data WHERE Address = "";
+SELECT * 
+FROM housing_data 
+WHERE Address = "";
 UPDATE housing_data
 SET Address = (SELECT Property_Address);
 
 
 
 -- Fill all empty address columns with "N/A"
-SELECT * FROM housing_data WHERE Property_Address = "";
+SELECT * 
+FROM housing_data 
+WHERE Property_Address = "";
 UPDATE housing_data
 SET Property_Address = (select CASE WHEN Property_Address = "" THEN "N/A" END)
 WHERE Property_Address = "";
@@ -26,10 +30,9 @@ WHERE Property_Address = "";
 UPDATE housing_data
 SET Sold_As_Vacant = (SELECT  
 CASE
-	WHEN Sold_As_Vacant = 'N' THEN 'No' 
+    WHEN Sold_As_Vacant = 'N' THEN 'No' 
     WHEN Sold_As_Vacant = 'Y' THEN 'YES'
-    
-END AS Sold_As_Vacant);
+    END AS Sold_As_Vacant);
 
 
 -- Renamd Unamed Column AS Unique ID
@@ -38,10 +41,11 @@ RENAME COLUMN unamed_1 TO unique_ID;
     
 -- Remove Duplicates
 WITH dup_rows AS (
-SELECT *, ROW_NUMBER() OVER (PARTITION BY Parcel_ID, 
-Property_Address,
-Sale_Date, 
-Sale_Price 
+SELECT *, 
+	ROW_NUMBER() OVER (PARTITION BY Parcel_ID, 
+	Property_Address,
+	Sale_Date, 
+	Sale_Price 
 
 ORDER BY Unique_ID ) AS row_num
 FROM housing_data
@@ -59,7 +63,8 @@ DELETE FROM housing_data
 WHERE Unique_ID NOT IN (
   SELECT Unique_ID
   FROM (
-    SELECT Unique_ID, ROW_NUMBER() OVER (PARTITION BY Parcel_ID, Property_Address, Sale_Date, Sale_Price ORDER BY Unique_ID) AS row_num
+    SELECT Unique_ID, 
+	   ROW_NUMBER() OVER (PARTITION BY Parcel_ID, Property_Address, Sale_Date, Sale_Price ORDER BY Unique_ID) AS row_num
     FROM housing_data
   ) AS dup_rows
   WHERE row_num = 1
