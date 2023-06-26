@@ -79,3 +79,4 @@ DROP COLUMN Owner_Name,
 DROP COLUMN  Address;
 
 SELECT * FROM housing_data;
+
